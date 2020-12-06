@@ -38,7 +38,11 @@ class VerseManager {
 
             let verses = verseRegex.allMatches(in: $0.matched)
             let translated = verses
-                .map { bookRegex.replaceAll(in: $0) { settings.mappingVersion.map?[$0.matched] ?? $0.matched } }
+                .map {
+                    bookRegex.replaceAll(in: $0) {
+                        settings.mappingVersion.map?[$0.matched.trimmingCharacters(in: .newlines).replacingOccurrences(of: " ", with: "")] ?? $0.matched
+                    }
+                }
                 .map {
                     let first = $0.replacingOccurrences(of: " ", with: "")
                     if !first.contains(":") {
@@ -95,7 +99,11 @@ class VerseManager {
     
     // Private
     private func callApi(on path: String, bibleVersion: BibleVersion, callback: ((Data?, Error?) -> Void)? = nil) {
-        URLSession.shared.dataTask(with: URL(string: "http://getbible.net/json?scrip=\(path)&v=\(bibleVersion.rawValue)")!) { (data, res, err) in
+        guard let url = URL(string: "http://getbible.net/json?scrip=\(path)&v=\(bibleVersion.rawValue)") else {
+            callback?(nil, URLError(.badURL))
+            return
+        }
+        URLSession.shared.dataTask(with: url) { (data, res, err) in
             if let data = data {
                 callback?(data, nil)
             } else {
