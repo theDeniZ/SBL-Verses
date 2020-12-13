@@ -72,7 +72,8 @@ class VerseManager {
             let formattedVerses = response?.formattedVerses(
                 withPrefix: settings.verseFormattingSettings.versePrefix,
                 andSuffix: settings.verseFormattingSettings.verseSuffix,
-                predicateForLocation: settings.verseFormattingSettings.verseLocationPredicate
+                predicateForLocation: settings.verseFormattingSettings.verseLocationPredicate,
+                backwardsMapping: settings.mappingVersion.backwardsMap
             )
 
             logs.append(

@@ -82,7 +82,7 @@ let russianMapping = [
     "Левит": "Leviticus",
     "Числа": "Numbers",
     "Второзаконие": "Deuteronomy",
-    "Иисуса Навина": "Joshua",
+    "ИисусаНавина": "Joshua",
     "Судей": "Judges",
     "Руфь": "Ruth",
     "1Царств": "1Samuel",
@@ -145,6 +145,75 @@ let russianMapping = [
     "Откровение": "Revelation"
 ]
 
+let russianBackwardsMapping = [
+    "Genesis": "Бытие",
+    "Exodus": "Исход",
+    "Leviticus": "Левит",
+    "Numbers": "Числа",
+    "Deuteronomy": "Второзаконие",
+    "Joshua": "Иисуса Навина",
+    "Judges": "Судей",
+    "Ruth": "Руфь",
+    "1 Samuel": "1 Царств",
+    "2 Samuel": "2 Царств",
+    "1 Kings": "3 Царств",
+    "2 Kings": "4 Царств",
+    "1 Chronicles": "1 Паралипоменон",
+    "2 Chronicles": "2 Паралипоменон",
+    "Ezra": "Ездры",
+    "Nehemiah": "Неемии",
+    "Esther": "Есфирь",
+    "Job": "Иова",
+    "Psalms": "Псалтирь",
+    "Proverbs": "Притчи",
+    "Ecclesiastes": "Екклесиаста",
+    "Song of Solomon": "Песнь Песней",
+    "Isaiah": "Исаии",
+    "Jeremiah": "Иеремии",
+    "Lamentations": "Плач Иеремии",
+    "Ezekiel": "Иезекииля",
+    "Daniel": "Даниила",
+    "Hosea": "Осии",
+    "Joel": "Иоиля",
+    "Amos": "Амоса",
+    "Obadiah": "Авдия",
+    "Jonah": "Ионы",
+    "Micah": "Михея",
+    "Nahum": "Наума",
+    "Habakkuk": "Аввакума",
+    "Zephaniah": "Софонии",
+    "Haggai": "Аггея",
+    "Zechariah": "Захарии",
+    "Malachi": "Малахии",
+    "Matthew": "От Матфея",
+    "Mark": "От Марка",
+    "Luke": "От Луки",
+    "John": "От Иоанна",
+    "Acts": "Деяние",
+    "Romans": "К Римлянам",
+    "1 Corinthians": "1 Коринфянам",
+    "2 Corinthians": "2 Коринфянам",
+    "Galatians": "К Галатам",
+    "Ephesians": "К Ефесянам",
+    "Philippians": "К Филиппийцам",
+    "Colossians": "К Колоссянам",
+    "1 Thessalonians": "1 Фессалоникийцам",
+    "2 Thessalonians": "2 Фессалоникийцам",
+    "1 Timothy": "1 Тимофею",
+    "2 Timothy": "2 Тимофею",
+    "Titus": "К Титу",
+    "Philemon": "К Филимону",
+    "Hebrews": "К Евреям",
+    "James": "Иакова",
+    "1 Peter": "1 Петра",
+    "2 Peter": "2 Петра",
+    "1 John": "1 Иоанна",
+    "2 John": "2 Иоанна",
+    "3 John": "3 Иоанна",
+    "Jude": "Иуды",
+    "Revelation": "Откровение"
+]
+
 enum MappingVersion: CaseIterable {
     case noMapping
     case german
@@ -159,6 +228,10 @@ enum MappingVersion: CaseIterable {
         case .russian: return russianMapping
         //        case .ukrainian: return nil
         }
+    }
+    
+    var backwardsMap: [String: String]? {
+        return self == .russian ? russianBackwardsMapping : nil
     }
     
     var displayTitle: String {

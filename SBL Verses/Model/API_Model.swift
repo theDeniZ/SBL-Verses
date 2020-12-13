@@ -18,8 +18,13 @@ struct BibleResponse: Decodable, CustomStringConvertible {
         book.map { $0.descriptionForDebug }.joined(separator: ";")
     }
     
-    func formattedVerses(withPrefix prefix: String, andSuffix suffix: String, predicateForLocation: String) -> String {
-        book.map { prefix + $0.formattedVerses(with: predicateForLocation) + suffix }.joined(separator: "\n")
+    func formattedVerses(
+        withPrefix prefix: String,
+        andSuffix suffix: String,
+        predicateForLocation: String,
+        backwardsMapping: [String: String]? = nil
+    ) -> String {
+        book.map { prefix + $0.formattedVerses(with: predicateForLocation, backMap: backwardsMapping) + suffix }.joined(separator: "\n")
     }
 }
 
@@ -36,9 +41,9 @@ struct Book: Decodable, CustomStringConvertible {
         book_name + " " + chapter_nr + ":" + chapter.descriptionForDebug
     }
     
-    func formattedVerses(with predicate: String) -> String {
+    func formattedVerses(with predicate: String, backMap: [String: String]? = nil) -> String {
         guard predicate.contains("%@") else { fatalError() }
-        let location = String(format: predicate, "(\(book_name) \(chapter_nr))")
+        let location = String(format: predicate, "(\(backMap?[book_name] ?? book_name) \(chapter_nr))")
         let verses = chapter.formatterVerses()
         return verses + " " + location
     }
