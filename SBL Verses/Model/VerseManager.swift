@@ -8,6 +8,17 @@
 import Foundation
 import Regex
 
+struct LogRecord {
+    let question: String
+    let foundQuestionLocations: String
+    let translatedQuestionLocations: String
+    let response: String
+    
+    var descrciption: String {
+        "Question '\(question)'\nFound locations: [\(foundQuestionLocations)], translated into [\(translatedQuestionLocations)]\n\nResponse:\n\(response)\n"
+    }
+}
+
 class VerseManager {
     
     enum VerseManagerError: Error {
@@ -17,7 +28,7 @@ class VerseManager {
     // API
     let originalString: String
     var replaced: String?
-//    private var matches = [(String, [String], [String], String?, String?)]()
+    private var logs: [LogRecord] = []
     
     init(originalString: String) {
         self.originalString = originalString
@@ -29,6 +40,8 @@ class VerseManager {
             let verseRegex = settings.regexSettings.versesRegex.r,
             let bookRegex = settings.regexSettings.bookRegex.r
         else { throw VerseManagerError.wrongRegex }
+        
+        logs = []
         
         let overall = questionRegex.allMatches(in: originalString).count
         var current = 0
@@ -62,18 +75,14 @@ class VerseManager {
                 predicateForLocation: settings.verseFormattingSettings.verseLocationPredicate
             )
 
-//            matches.append(($0.matched, verses, translated, response?.descriptionForDebug, formattedVerses))
-            NSLog("""
-                Question \(current):
-                \($0.matched)
-                read '\(verses)', translated '\(translated)';
-                Response: '\(response?.descriptionForDebug ?? "nil")'
-                Formatted:
-                \(formattedVerses ?? "nil")
-                End question \(current)
-                
-                
-                """)
+            logs.append(
+                LogRecord(
+                    question: $0.matched.trimmingCharacters(in: .whitespacesAndNewlines),
+                    foundQuestionLocations: verses.joined(separator: "; "),
+                    translatedQuestionLocations: requestString,
+                    response: response?.description ?? "No response"
+                )
+            )
             if let allFormattedVerses = formattedVerses, !allFormattedVerses.isEmpty {
 
                 return $0.matched + settings.verseFormattingSettings.containerPrefix + allFormattedVerses + settings.verseFormattingSettings.containerSuffix
@@ -95,6 +104,10 @@ class VerseManager {
             }
         }
         return false
+    }
+    
+    func getLogs() -> String {
+        logs.enumerated().map({"Record \($0 + 1):\n\($1.descrciption)\n----------"}).joined(separator: "\n")
     }
     
     // Private
@@ -134,4 +147,5 @@ class VerseManager {
         
         return response
     }
+    
 }

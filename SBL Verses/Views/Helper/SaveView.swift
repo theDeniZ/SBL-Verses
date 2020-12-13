@@ -10,6 +10,7 @@ import SwiftUI
 struct SaveView: View {
     
     let saveAction: (URL?) -> Void
+    let logsAction: () -> Void
     let originalURL: URL
     
     var body: some View {
@@ -27,12 +28,17 @@ struct SaveView: View {
             Button("Replace original file") {
                 saveAction(nil)
             }
+                .font(.headline)
+            Button("Copy logs") {
+                logsAction()
+            }
+                .font(.subheadline)
         }
     }
 }
 
 struct SaveView_Previews: PreviewProvider {
     static var previews: some View {
-        SaveView(saveAction: { _ in return }, originalURL: URL(fileURLWithPath: "/"))
+        SaveView(saveAction: { _ in return }, logsAction: {}, originalURL: URL(fileURLWithPath: "/"))
     }
 }

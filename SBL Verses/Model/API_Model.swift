@@ -11,7 +11,7 @@ struct BibleResponse: Decodable, CustomStringConvertible {
     let book: [Book]
     
     var description: String {
-        book.map { $0.description }.joined(separator: "\n")
+        book.map { $0.description }.joined(separator: "\n\n")
     }
     
     var descriptionForDebug: String {
@@ -29,7 +29,7 @@ struct Book: Decodable, CustomStringConvertible {
     let chapter: Verses
     
     var description: String {
-        "Name \(book_name), chapter \(chapter_nr), verses: \(chapter.description)"
+        "Book: '\(book_name)', chapter '\(chapter_nr)', verses: \(chapter.description)"
     }
     
     var descriptionForDebug: String {
@@ -55,7 +55,7 @@ class Verses: Decodable, CustomStringConvertible {
     }
     
     var description: String {
-        verses.map { $0.description }.joined()
+        verses.map { $0.description }.joined(separator: "; ")
     }
     
     var descriptionForDebug: String {
@@ -89,6 +89,6 @@ class Verse: Decodable, CustomStringConvertible {
     }
     
     var description: String {
-        "{num: \(number); verse: \(verse)}"
+        "\n\(number): `\(verse.trimmingCharacters(in: .whitespacesAndNewlines))`"
     }
 }

@@ -54,7 +54,7 @@ struct MainView: View {
                     .padding()
                     .disabled(isDetailsDisabled)
 
-                originalURL.flatMap { SaveView(saveAction: saveAction, originalURL: $0).disabled(!hasFinished) }
+                originalURL.flatMap { SaveView(saveAction: saveAction, logsAction: copyLogsAction, originalURL: $0).disabled(!hasFinished) }
                 statusString.flatMap { Text($0) }
                 
             }
@@ -122,6 +122,14 @@ struct MainView: View {
         } else {
             statusString = "Error saving file! Try other one"
         }
+    }
+    
+    private func copyLogsAction() {
+        let log = verseManager?.getLogs() ?? ""
+        
+        let pasteboard = NSPasteboard.general
+        pasteboard.declareTypes([NSPasteboard.PasteboardType.string], owner: nil)
+        pasteboard.setString(log, forType: NSPasteboard.PasteboardType.string)
     }
     
     private func resetProgress() {
